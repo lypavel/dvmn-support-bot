@@ -19,7 +19,10 @@ def create_api_key(project_id: str) -> Key:
     return response
 
 
-def detect_intent_text(project_id: str, session_id: str, text: str, language_code: str = 'ru-RU'):
+def detect_intent_text(project_id: str,
+                       session_id: str,
+                       text: str,
+                       language_code: str = 'ru'):
     '''Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation
@@ -34,7 +37,8 @@ def detect_intent_text(project_id: str, session_id: str, text: str, language_cod
         request={'session': session, 'query_input': query_input}
     )
 
-    return response.query_result.fulfillment_text
+    return response.query_result.fulfillment_text, \
+        response.query_result.intent.is_fallback
 
 
 def main():

@@ -27,7 +27,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
 def reply_to_user(update: Update, context: CallbackContext) -> None:
     text = update.message.text
-    reply_text = detect_intent_text(
+    reply_text, _ = detect_intent_text(
         env.str('GOOGLE_CLOUD_PROJECT_ID'),
         update.message.chat_id,
         text
