@@ -5,14 +5,9 @@ from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, \
     CallbackContext
 
-from dialogflow import detect_intent_text
+from dialogflow.dialogflow_utils import detect_intent_text
+from logs_handler import TelegramLogsHandler
 
-
-logging.basicConfig(
-    filename=f'{__file__.replace(".py", "")}.log',
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
 
 logger = logging.getLogger(__name__)
 
@@ -41,15 +36,24 @@ if __name__ == '__main__':
     env.read_env()
 
     tg_bot_token = env.str('TG_BOT_TOKEN')
+    tg_logs_chat_id = env.int('TG_LOGS_CHAT_ID')
 
-    updater = Updater(tg_bot_token)
-    dispatcher = updater.dispatcher
+    logger.setLevel(logging.INFO)
+    logger.addHandler(TelegramLogsHandler(tg_bot_token, tg_logs_chat_id))
 
-    dispatcher.add_handler(CommandHandler('start', start))
+    logger.info('Telegram support bot started.')
 
-    dispatcher.add_handler(MessageHandler(
-        Filters.text & ~Filters.command, reply_to_user
-    ))
+    try:
+        updater = Updater(tg_bot_token)
+        dispatcher = updater.dispatcher
 
-    updater.start_polling()
-    updater.idle()
+        dispatcher.add_handler(CommandHandler('start', start))
+
+        dispatcher.add_handler(MessageHandler(
+            Filters.text & ~Filters.command, reply_to_user
+        ))
+
+        updater.start_polling()
+        updater.idle()
+    except Exception as exception:
+        logging.exception(exception)

@@ -1,4 +1,3 @@
-from environs import Env
 from google.cloud import api_keys_v2, dialogflow
 from google.cloud.api_keys_v2 import Key
 
@@ -17,6 +16,40 @@ def create_api_key(project_id: str) -> Key:
 
     print(f'Successfully created an API key: {response.name}')
     return response
+
+
+def create_intent(project_id,
+                  display_name,
+                  training_phrases_parts,
+                  message_text):
+    """Create an intent of the given intent type."""
+
+    intents_client = dialogflow.IntentsClient()
+
+    parent = dialogflow.AgentsClient.agent_path(project_id)
+    training_phrases = []
+    for training_phrases_part in training_phrases_parts:
+        part = dialogflow.Intent.TrainingPhrase.Part(
+            text=training_phrases_part
+        )
+
+        training_phrase = dialogflow.Intent.TrainingPhrase(parts=[part])
+        training_phrases.append(training_phrase)
+
+    text = dialogflow.Intent.Message.Text(text=[message_text])
+    message = dialogflow.Intent.Message(text=text)
+
+    intent = dialogflow.Intent(
+        display_name=display_name,
+        training_phrases=training_phrases,
+        messages=[message]
+    )
+
+    response = intents_client.create_intent(
+        request={"parent": parent, "intent": intent}
+    )
+
+    print("Intent created: {}".format(response))
 
 
 def detect_intent_text(project_id: str,
@@ -39,16 +72,3 @@ def detect_intent_text(project_id: str,
 
     return response.query_result.fulfillment_text, \
         response.query_result.intent.is_fallback
-
-
-def main():
-    env = Env()
-    env.read_env()
-    project_id = env.str('GOOGLE_CLOUD_PROJECT_ID')
-
-    with open('project_api_key.txt', 'a', encoding='utf-8') as stream:
-        stream.write(str(create_api_key(project_id)))
-
-
-if __name__ == '__main__':
-    main()
