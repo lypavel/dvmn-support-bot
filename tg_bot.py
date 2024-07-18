@@ -5,6 +5,8 @@ from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, \
     CallbackContext
 
+from dialogflow import detect_intent_text
+
 
 logging.basicConfig(
     filename=f'{__file__.replace(".py", "")}.log',
@@ -23,11 +25,18 @@ def start(update: Update, context: CallbackContext) -> None:
     )
 
 
-def echo(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(update.message.text)
+def reply_to_user(update: Update, context: CallbackContext) -> None:
+    text = update.message.text
+    reply_text = detect_intent_text(
+        env.str('GOOGLE_CLOUD_PROJECT_ID'),
+        update.message.chat_id,
+        text
+    )
+
+    update.message.reply_text(reply_text)
 
 
-def main() -> None:
+if __name__ == '__main__':
     env = Env()
     env.read_env()
 
@@ -39,12 +48,8 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler('start', start))
 
     dispatcher.add_handler(MessageHandler(
-        Filters.text & ~Filters.command, echo
+        Filters.text & ~Filters.command, reply_to_user
     ))
 
     updater.start_polling()
     updater.idle()
-
-
-if __name__ == '__main__':
-    main()
