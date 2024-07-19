@@ -9,7 +9,7 @@ from dialogflow.dialogflow_utils import detect_intent_text
 from logs_handler import TelegramLogsHandler
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
 
 def start(update: Update, context: CallbackContext) -> None:

@@ -8,7 +8,7 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from dialogflow.dialogflow_utils import detect_intent_text
 from logs_handler import TelegramLogsHandler
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
 
 def reply_to_user(event, vk_api, project_id):
