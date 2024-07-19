@@ -20,7 +20,7 @@
 
 ## Установка
 
-1. Установите Python 3.10.12 и, если необходимо, создайте виртуальное окружение и активируйте его:
+1. Установите [Python 3.10.12](https://www.python.org/downloads/release/python-31012/) и, если необходимо, создайте виртуальное окружение и активируйте его:
     ```sh
     python3 -m venv venv
     source venv/bin/activate
@@ -29,14 +29,14 @@
     ```sh
     pip install -r requirements.txt
     ```
-3. Создайте проект в Google Cloud. Подробнее в документации.
-4. Создайте агент в DialogFlow. Проследите, чтобы id вашего проекта в Google и id агента совпадали. Подробнее в документации.
-5. Получите API-ключ Dialogflow. Для этого запустите скрипт:
+3. Создайте проект в Google Cloud. Подробнее в [документации](https://cloud.google.com/dialogflow/es/docs/quick/setup).
+4. Создайте агент в DialogFlow. Проследите, чтобы id вашего проекта в Google и id агента совпадали. Подробнее в [документации](https://cloud.google.com/dialogflow/es/docs/quick/build-agent).
+5. Получите [API-ключ Dialogflow](https://cloud.google.com/docs/authentication/api-keys). Для этого запустите скрипт:
     ```sh
     python3 dialogflow/create_api_key.py
     ```
     Информация для авторизации будет сохранена в файл `./project_api_key.txt`
-6. Добавьте `Intents` в вашего агента DialogFlow. Это можно сделать как вручную (см. документацию), так и с помощью скрипта:
+6. Добавьте `Intents` в вашего агента DialogFlow. Это можно сделать как вручную (см. [документацию](https://cloud.google.com/dialogflow/es/docs/quick/api#detect_intent)), так и с помощью скрипта:
     ```sh
     python3 dialogflow/create_intents.py
     ```
