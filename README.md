@@ -38,9 +38,11 @@
     Информация для авторизации будет сохранена в файл `./project_api_key.txt`
 6. Добавьте `Intents` в вашего агента DialogFlow. Это можно сделать как вручную (см. [документацию](https://cloud.google.com/dialogflow/es/docs/quick/api#detect_intent)), так и с помощью скрипта:
     ```sh
-    python3 dialogflow/create_intents.py
+    python3 dialogflow/create_intents.py --file_name <path_to_intents_info.json>
     ```
-    Информацию для обучения поместите в файл `./questions.json`, который имеет следующую структуру:
+    где `<path_to_intents_info.json>` - путь к вашему JSON-файлу, содержащему информацию об `Intents`.<br>По-умолчанию -  `questions.json`
+
+    Файл должен иметь следующую структуру:
     ```json
     {
         "Устройство на работу": {
